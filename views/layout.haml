@@ -3,5 +3,34 @@
   %head
     %title pianito.js
     %link{:rel => :stylesheet, :type => :"text/css", :href => "/stylesheets/piano.css"}
+    %script{:type => "text/javascript", :src  => "MIDI/AudioDetect.js"}
+    %script{:type => "text/javascript", :src  => "MIDI/LoadPlugin.js"}
+    %script{:type => "text/javascript", :src  => "MIDI/Plugin.js"}
+    %script{:type => "text/javascript", :src  => "MIDI/Player.js"}
+    %script{:type => "text/javascript", :src  => "Window/DOMLoader.XMLHttp.js"}
+    %script{:type => "text/javascript", :src  => "Base64.js"}
+    %script{:type => "text/javascript", :src  => "base64binary.js"}
   %body
     =yield
+    :javascript
+      window.onload = function () {
+        var keys, playNote;
+
+        playNote = function (e) {
+          console.log("playing note " + MIDI.noteToKey[e.target.id]);
+          MIDI.noteOn(0, e.target.id, 127, 0);
+        };
+
+        MIDI.loadPlugin({
+          soundfontUrl: "./soundfont/",
+          instrument: "acoustic_grand_piano",
+          callback: function() { 
+            MIDI.setVolume(0, 127); 
+          }
+        });
+
+        keys = document.getElementsByClassName('key');
+        for (i = keys.length; i--;) {
+          keys[i].addEventListener('click', playNote, false);
+        }
+      };
