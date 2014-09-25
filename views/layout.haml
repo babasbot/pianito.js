@@ -16,16 +16,17 @@
       window.onload = function () {
         var keys, playNote;
 
-        playNote = function (e) {
-          console.log("playing note " + MIDI.noteToKey[e.target.id]);
-          MIDI.noteOn(0, e.target.id, 127, 0);
+        playNote = function (event) {
+          console.log("playing note " + MIDI.noteToKey[event.target.id]);
+          MIDI.noteOn(0, event.target.id, 80, 0);
         };
 
         MIDI.loadPlugin({
           soundfontUrl: "./soundfont/",
-          instrument: "acoustic_grand_piano",
+          instrument: "synth_bass_1",
           callback: function() { 
-            MIDI.setVolume(0, 127); 
+            var instrument = 38;
+            MIDI.programChange(0, instrument); 
           }
         });
 
